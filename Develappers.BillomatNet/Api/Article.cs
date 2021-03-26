@@ -70,5 +70,8 @@ namespace Develappers.BillomatNet.Api
 
         [JsonProperty("supplier_id")]
         public string SupplierId { get; set; }
+
+        [JsonProperty("customfield")]
+        public string Customfield { get; set; }
     }
 }

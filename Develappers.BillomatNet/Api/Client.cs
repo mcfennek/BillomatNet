@@ -172,5 +172,8 @@ namespace Develappers.BillomatNet.Api
 
         [JsonProperty("revenue_net")]
         public string RevenueNet { get; set; }
+
+        [JsonProperty("customfield")]
+        public string Customfield { get; set; }
     }
 }

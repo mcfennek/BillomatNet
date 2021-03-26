@@ -50,5 +50,7 @@ namespace Develappers.BillomatNet.Types
         public NetGrossType PurchasePriceNetGross { get; set; }
 
         public int? SupplierId { get; set; }
+
+        public string Customfield { get; set; }
     }
 }

@@ -135,6 +135,16 @@ namespace Develappers.BillomatNet
                 Invoice = value.ToApi()
             };
 
+            // set empty values to null to use billomat defaults
+            if (value.Title == "") { wrappedModel.Invoice.Title = null; }
+            if (!value.Date.HasValue || value.Date == DateTime.MinValue) { wrappedModel.Invoice.Date = null; }
+            if (value.DueDate == DateTime.MinValue) { wrappedModel.Invoice.DueDate = null; }
+            if (value.DueDays == 0) { wrappedModel.Invoice.DueDays = null; }
+            if (value.Address == "") { wrappedModel.Invoice.Address = null; }
+            if (value.Label == "") { wrappedModel.Invoice.Label = null; }
+            if (value.Intro == "") { wrappedModel.Invoice.Intro = null; }
+            if (value.Note == "") { wrappedModel.Invoice.Note = null; }
+
             var result = await PostAsync($"/api/{EntityUrlFragment}", wrappedModel, token);
 
             return result.ToDomain();
@@ -183,6 +193,9 @@ namespace Develappers.BillomatNet
             {
                 Invoice = value.ToApi()
             };
+
+            // set empty values to null to use billomat defaults
+            if (value.DueDate == DateTime.MinValue) { wrappedModel.Invoice.DueDate = null; }
 
             try
             {

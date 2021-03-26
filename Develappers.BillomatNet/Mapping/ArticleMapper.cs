@@ -61,8 +61,8 @@ namespace Develappers.BillomatNet.Mapping
                 SupplierId = value.SupplierId.ToOptionalInt(),
                 TaxId = value.TaxId.ToOptionalInt(),
                 Title = value.Title,
-                UnitId = value.UnitId.ToOptionalInt()
-
+                UnitId = value.UnitId.ToOptionalInt(),
+                Customfield = value.Customfield
             };
         }
 
@@ -92,7 +92,8 @@ namespace Develappers.BillomatNet.Mapping
                 SupplierId = value.SupplierId.ToString(),
                 TaxId = value.TaxId.ToString(),
                 Title = value.Title,
-                UnitId = value.UnitId.ToString()
+                UnitId = value.UnitId.ToString(),
+                Customfield = value.Customfield
             };
         }
 

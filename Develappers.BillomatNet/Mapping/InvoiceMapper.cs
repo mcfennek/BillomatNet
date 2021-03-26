@@ -123,7 +123,8 @@ namespace Develappers.BillomatNet.Mapping
                 DiscountDays = value.DiscountDays.ToOptionalInt(),
                 DiscountAmount = value.DiscountAmount.ToOptionalFloat(),
                 PaidAmount = value.PaidAmount.ToFloat(),
-                OpenAmount = value.OpenAmount.ToFloat()
+                OpenAmount = value.OpenAmount.ToFloat(),
+                Customfield = value.Customfield
             };
         }
 
@@ -223,7 +224,8 @@ namespace Develappers.BillomatNet.Mapping
                 TemplateId = value.TemplateId.ToApiOptionalInt(),
                 PaymentTypes = paymentTypes,
                 Taxes = null,
-                InvoiceItems = itemsWrapper
+                InvoiceItems = itemsWrapper,
+                Customfield = value.Customfield
             };
         }
 

@@ -55,5 +55,8 @@ namespace Develappers.BillomatNet.Api
 
         [JsonProperty("total_net_unreduced")]
         public string TotalNetUnreduced { get; set; }
+
+        [JsonProperty("customfield")]
+        public string Customfield { get; set; }
     }
 }

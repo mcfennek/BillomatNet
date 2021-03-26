@@ -39,5 +39,7 @@ namespace Develappers.BillomatNet.Types
         public float TotalGrossUnreduced { get; set; }
 
         public float TotalNetUnreduced { get; set; }
+
+        public string Customfield { get; set; }
     }
 }

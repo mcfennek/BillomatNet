@@ -55,5 +55,6 @@ namespace Develappers.BillomatNet.Types
         public float PaidAmount { get; set; }
         public float OpenAmount { get; set; }
         public List<InvoiceItem> InvoiceItems { get; set; }
+        public string Customfield { get; set; }
     }
 }

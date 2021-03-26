@@ -133,7 +133,18 @@ namespace Develappers.BillomatNet.Api
 
         [JsonProperty("taxes")]
         public InvoiceTaxWrapper Taxes { get; set; }
+
         [JsonProperty("invoice_items")]
         public InvoiceItemsWrapper InvoiceItems { get; set; }
+
+        [JsonProperty("customfield")]
+        public string Customfield { get; set; }
+
+        public bool ShouldSerializeInvoiceItems()
+        {
+            // don't serialize InvoiceItems property if not set
+            // to delete invoice items, set to empty list
+            return (InvoiceItems != null);
+        }
     }
 }

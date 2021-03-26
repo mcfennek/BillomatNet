@@ -74,8 +74,9 @@ namespace Develappers.BillomatNet.Mapping
                 DebitorAccountNumber = value.DebitorAccountNumber.ToOptionalInt(),
                 DunningRun = value.DunningRun != "0",
                 Note = value.Note,
-                RevenueGross =value.RevenueGross.ToOptionalFloat(),
-                RevenueNet = value.RevenueNet.ToOptionalFloat()
+                RevenueGross = value.RevenueGross.ToOptionalFloat(),
+                RevenueNet = value.RevenueNet.ToOptionalFloat(),
+                Customfield = value.Customfield
             };
         }
 

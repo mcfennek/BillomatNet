@@ -67,5 +67,6 @@ namespace Develappers.BillomatNet.Types
         public string Note { get; set; }
         public float? RevenueGross { get; set; }
         public float? RevenueNet { get; set; }
+        public string Customfield { get; set; }
     }
 }
