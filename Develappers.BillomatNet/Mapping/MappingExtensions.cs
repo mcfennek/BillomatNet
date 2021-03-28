@@ -332,6 +332,11 @@ namespace Develappers.BillomatNet.Mapping
             return s_clientMapper.ApiToDomain(value);
         }
 
+        internal static Api.Client ToApi(this Client value)
+        {
+            return s_clientMapper.DomainToApi(value);
+        }
+
         internal static Types.PagedList<TagCloudItem> ToDomain(this ClientTagCloudItemListWrapper value)
         {
             return s_clientTagMapper.ApiToDomain(value);
