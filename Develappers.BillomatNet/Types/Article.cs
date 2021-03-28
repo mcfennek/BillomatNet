@@ -3,6 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using Develappers.BillomatNet.Api;
+using Develappers.BillomatNet.Mapping;
+using Newtonsoft.Json;
 
 namespace Develappers.BillomatNet.Types
 {
@@ -11,6 +14,12 @@ namespace Develappers.BillomatNet.Types
     /// </summary>
     public class Article
     {
+        public static Article FromJson(string json)
+        {
+            var jsonModel = JsonConvert.DeserializeObject<ArticleWrapper>(json);
+            return jsonModel.ToDomain();
+        }
+
         public int Id { get; set; }
 
         public DateTime Created { get; set; }

@@ -4,6 +4,9 @@
 
 using System;
 using System.Collections.Generic;
+using Develappers.BillomatNet.Api;
+using Develappers.BillomatNet.Mapping;
+using Newtonsoft.Json;
 
 namespace Develappers.BillomatNet.Types
 {
@@ -12,6 +15,12 @@ namespace Develappers.BillomatNet.Types
     /// </summary>
     public class Client
     {
+        public static Client FromJson(string json)
+        {
+            var jsonModel = JsonConvert.DeserializeObject<ClientWrapper>(json);
+            return jsonModel.ToDomain();
+        }
+
         public int Id { get; set; }
         public DateTime Created { get; set; }
         public bool Archived { get; set; }

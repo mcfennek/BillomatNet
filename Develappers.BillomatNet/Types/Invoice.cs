@@ -4,6 +4,9 @@
 
 using System;
 using System.Collections.Generic;
+using Develappers.BillomatNet.Api;
+using Develappers.BillomatNet.Mapping;
+using Newtonsoft.Json;
 
 namespace Develappers.BillomatNet.Types
 {
@@ -12,6 +15,12 @@ namespace Develappers.BillomatNet.Types
     /// </summary>
     public class Invoice
     {
+        public static Invoice FromJson(string json)
+        {
+            var jsonModel = JsonConvert.DeserializeObject<InvoiceWrapper>(json);
+            return jsonModel.ToDomain();
+        }
+
         public int Id { get; set; }
         public int ClientId { get; set; }
         public string CustomerPortalUrl { get; set; }
