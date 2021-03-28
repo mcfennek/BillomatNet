@@ -114,19 +114,90 @@ namespace Develappers.BillomatNet
             return $"https://{_configuration.BillomatId}.billomat.net/app/{EntityUrlFragment}/show/entityId/{id}";
         }
 
-        Task IEntityService<Client, ClientFilter>.DeleteAsync(int id, CancellationToken token)
+        /// <summary>
+        /// Deletes the clients with the given ID.
+        /// </summary>
+        /// <param name="id">The ID.</param>
+        /// <param name="token">The token.</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation.
+        /// </returns>
+        /// <exception cref="ArgumentException">Thrown when the parameter check fails.</exception>
+        /// <exception cref="NotAuthorizedException">Thrown when not authorized to access this resource.</exception>
+        /// <exception cref="NotFoundException">Thrown when the resource url could not be found.</exception>
+        public Task DeleteAsync(int id, CancellationToken token = default)
         {
-            throw new NotImplementedException();
+            if (id <= 0)
+            {
+                throw new ArgumentException("invalid client id", nameof(id));
+            }
+            return DeleteAsync($"/api/{EntityUrlFragment}/{id}", token);
         }
 
-        Task<Client> IEntityService<Client, ClientFilter>.CreateAsync(Client value, CancellationToken token)
+        /// <summary>
+        /// Creates a client.
+        /// </summary>
+        /// <param name="value">The client to create.</param>
+        /// <param name="token">The cancellation token.</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation.
+        /// The task result contains the new client.
+        /// </returns>
+        /// <exception cref="ArgumentException">Thrown when the parameter check fails.</exception>
+        /// <exception cref="NotAuthorizedException">Thrown when not authorized to access this resource.</exception>
+        /// <exception cref="NotFoundException">Thrown when the resource url could not be found.</exception>
+        public async Task<Client> CreateAsync(Client value, CancellationToken token = default)
         {
-            throw new NotImplementedException();
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+            if (value.Id != 0)
+            {
+                throw new ArgumentException("invalid client id", nameof(value));
+            }
+
+            var wrappedModel = new ClientWrapper
+            {
+                Client = value.ToApi()
+            };
+
+            var jsonModel = await PostAsync("/api/clients", wrappedModel, token).ConfigureAwait(false);
+            return jsonModel.ToDomain();
+
         }
 
-        Task<Client> IEntityService<Client, ClientFilter>.EditAsync(Client value, CancellationToken token)
+        /// <summary>
+        /// Updates the specified client.
+        /// </summary>
+        /// <param name="value">The client.</param>
+        /// <param name="token">The token.</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation.
+        /// The task result contains the updated client.
+        /// </returns>
+        /// <exception cref="ArgumentException">Thrown when the parameter check fails.</exception>
+        /// <exception cref="NotAuthorizedException">Thrown when not authorized to access this resource.</exception>
+        /// <exception cref="NotFoundException">Thrown when the resource url could not be found.</exception>
+        public async Task<Client> EditAsync(Client value, CancellationToken token = default)
         {
-            throw new NotImplementedException();
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+
+            if (value.Id <= 0)
+            {
+                throw new ArgumentException("invalid client id", nameof(value));
+            }
+
+            var wrappedModel = new ClientWrapper
+            {
+                Client = value.ToApi()
+            };
+
+            var jsonModel = await PutAsync($"/api/{EntityUrlFragment}/{value.Id}", wrappedModel, token);
+            return jsonModel.ToDomain();
         }
 
         /// <summary>
