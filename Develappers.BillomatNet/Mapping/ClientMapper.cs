@@ -82,7 +82,76 @@ namespace Develappers.BillomatNet.Mapping
 
         public Api.Client DomainToApi(Client value)
         {
-            throw new NotImplementedException();
+            if (value == null)
+            {
+                return null;
+            }
+
+            string defaultPaymentTypes = null;
+            if (value.DefaultPaymentTypes != null && value.DefaultPaymentTypes.Count != 0)
+            {
+                defaultPaymentTypes = string.Join(",", value.DefaultPaymentTypes.Select(x => x.ToApiValue()).ToList());
+            }
+
+            return new Api.Client
+            {
+                Id = value.Id.ToApiInt(),
+                Created = value.Created.ToApiDateTime(),
+                Archived = value.Archived.BoolToString(),
+                ClientNumber = value.ClientNumber,
+                Number = value.Number.ToApiInt(),
+                NumberPre = value.NumberPre,
+                NumberLength = value.NumberLength.ToApiInt(),
+                Name = value.Name,
+                Salutation = value.Salutation,
+                FirstName = value.FirstName,
+                LastName = value.LastName,
+                Street = value.Street,
+                Zip = value.Zip,
+                City = value.City,
+                State = value.State,
+                CountryCode = value.CountryCode,
+                Address = value.Address,
+                Phone = value.Phone,
+                Fax = value.Fax,
+                Mobile = value.Mobile,
+                Email = value.Email,
+                Www = value.Www,
+                TaxNumber = value.TaxNumber,
+                VatNumber = value.VatNumber,
+                BankAccountOwner = value.BankAccountOwner,
+                BankNumber = value.BankNumber,
+                BankName = value.BankName,
+                BankAccountNumber = value.BankAccountNumber,
+                BankSwift = value.BankSwift,
+                BankIban = value.BankIban,
+                EnableCustomerportal = value.EnableCustomerportal.BoolToString(),
+                CustomerportalUrl = value.CustomerportalUrl,
+                SepaMandate = value.SepaMandate,
+                SepaMandateDate = value.SepaMandateDate.ToApiDate(),
+                TaxRule = value.TaxRule.ToApiValue(),
+                NetGross = value.NetGross.ToApiValue(),
+                DefaultPaymentTypes = defaultPaymentTypes,
+                Reduction = value.Reduction.ToApiOptionalFloat(),
+                DiscountRateType = value.DiscountRateType.ToApiValue(),
+                DiscountRate = value.DiscountRate.ToApiOptionalFloat(),
+                DiscountDaysType = value.DiscountDaysType.ToApiValue(),
+                DicountDays = value.DicountDays.ToApiOptionalInt(),
+                DueDaysType = value.DueDaysType.ToApiValue(),
+                DueDays = value.DueDays.ToApiOptionalInt(),
+                ReminderDueDaysType = value.ReminderDueDaysType.ToApiValue(),
+                ReminderDueDays = value.ReminderDueDays.ToApiOptionalInt(),
+                OfferValidityDaysType = value.OfferValidityDaysType.ToApiValue(),
+                OfferValidityDays = value.OfferValidityDays.ToApiOptionalInt(),
+                CurrencyCode = value.CurrencyCode,
+                PriceGroup = value.PriceGroup.ToApiOptionalInt(),
+                DebitorAccountNumber = value.DebitorAccountNumber.ToApiOptionalInt(),
+                DunningRun = value.DunningRun.BoolToString(),
+                Note = value.Note,
+                RevenueGross = value.RevenueGross.ToApiOptionalFloat(),
+                RevenueNet = value.RevenueNet.ToApiOptionalFloat(),
+                Customfield = value.Customfield
+            };
         }
 
         public Client ApiToDomain(ClientWrapper value)
