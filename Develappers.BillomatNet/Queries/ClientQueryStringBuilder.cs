@@ -54,6 +54,11 @@ namespace Develappers.BillomatNet.Queries
                 filters.Add($"note={HttpUtility.UrlEncode(filter.Note)}");
             }
 
+            if (!string.IsNullOrEmpty(filter.Customfield))
+            {
+                filters.Add($"customfield={HttpUtility.UrlEncode(filter.Customfield)}");
+            }
+
             if ((filter.InvoiceIds?.Count ?? 0) > 0)
             {
                 filters.Add($"invoice_id={string.Join(",", filter.InvoiceIds)}");

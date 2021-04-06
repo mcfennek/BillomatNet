@@ -18,6 +18,7 @@ namespace Develappers.BillomatNet.Queries
         public string LastName { get; set; }
         public string CountryCode { get; set; }
         public string Note { get; set; }
+        public string Customfield { get; set; }
         public List<int> InvoiceIds { get; set; }
         public List<string> Tags { get; set; }
     }
