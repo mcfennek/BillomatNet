@@ -3,9 +3,11 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Develappers.BillomatNet.Api;
+using Develappers.BillomatNet.Types;
 using Client = Develappers.BillomatNet.Types.Client;
 
 namespace Develappers.BillomatNet.Mapping
@@ -17,6 +19,12 @@ namespace Develappers.BillomatNet.Mapping
             if (value == null)
             {
                 return null;
+            }
+
+            var DefaultPaymentTypes = new List<PaymentType>(); ;
+            if (value.DefaultPaymentTypes != null && value.DefaultPaymentTypes.Length > 0)
+            {
+                DefaultPaymentTypes = value.DefaultPaymentTypes.Split(',').ToList().Select(x => x.ToPaymentType()).ToList();
             }
 
             return new Client
@@ -57,7 +65,7 @@ namespace Develappers.BillomatNet.Mapping
                 SepaMandateDate = value.SepaMandateDate.ToOptionalDateTime(),
                 TaxRule = value.TaxRule.ToTaxRuleType(),
                 NetGross = value.NetGross.ToNetGrossSettingsType(),
-                DefaultPaymentTypes = value.DefaultPaymentTypes.Split(',').ToList().Select(x => x.ToPaymentType()).ToList(),
+                DefaultPaymentTypes = DefaultPaymentTypes,
                 Reduction = value.Reduction.ToOptionalFloat(),
                 DiscountRateType = value.DiscountRateType.ToDiscountType(),
                 DiscountRate = value.DiscountRate.ToOptionalFloat(),
