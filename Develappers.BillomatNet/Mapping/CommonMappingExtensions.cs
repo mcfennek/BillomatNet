@@ -169,7 +169,7 @@ namespace Develappers.BillomatNet.Mapping
         /// <returns>System.String.</returns>
         internal static string ToApiOptionalInt(this int? value)
         {
-            return value.GetValueOrDefault(0) == 0 ? null : value.ToString();
+            return value == null ? null : value.ToString();
         }
 
         /// <summary>
