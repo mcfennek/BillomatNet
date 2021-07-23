@@ -84,6 +84,7 @@ namespace Develappers.BillomatNet.Mapping
 
             return new Api.InvoiceItem
             {
+                Id = value.Id.ToApiInt(),
                 ArticleId = value.ArticleId.ToString(),
                 InvoiceId = value.InvoiceId.ToString(),
                 Position = value.Position.ToString(),

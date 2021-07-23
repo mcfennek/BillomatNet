@@ -294,6 +294,28 @@ namespace Develappers.BillomatNet
             return DeleteAsync($"/api/{EntityUrlFragment}/{id}", token);
         }
 
+        /// <summary>
+        /// Retrieves a list of items (articles) appropriate to the filter.
+        /// </summary>
+        /// <param name="query">The filter.</param>
+        /// <param name="token">The token.</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation.
+        /// The task result contains the filtered list of invoice items (articles).
+        /// </returns>
+        /// <exception cref="ArgumentException">Thrown when the parameter check fails.</exception>
+        /// <exception cref="NotAuthorizedException">Thrown when not authorized to access this resource.</exception>
+        /// <exception cref="NotFoundException">Thrown when the resource url could not be found.</exception>
+        public async Task<Types.PagedList<InvoiceItem>> GetItemListAsync(Query<InvoiceItem, InvoiceItemFilter> query, CancellationToken token = default)
+        {
+            if (query == null)
+            {
+                throw new ArgumentNullException(nameof(query));
+            }
+
+            var jsonModel = await GetListAsync<InvoiceItemListWrapper>("/api/invoice-items", QueryString.For(query), token).ConfigureAwait(false);
+            return jsonModel.ToDomain();
+        }
 
         /// <summary>
         /// Retrieves a list of the items (articles) used in the invoice.
