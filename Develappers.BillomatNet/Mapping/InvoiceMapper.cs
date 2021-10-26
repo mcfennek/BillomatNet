@@ -28,17 +28,38 @@ namespace Develappers.BillomatNet.Mapping
             {
                 case "supply_date":
                     supplyDateType = SupplyDateType.SupplyDate;
-                    supplyDate = new DateSupplyDate
+                    try
                     {
-                        Date = value.SupplyDate.ToOptionalDateTime()
-                    };
+                        supplyDate = new DateSupplyDate
+                        {
+                            Date = value.SupplyDate.ToOptionalDateTime()
+                        };
+                    }
+                    catch
+                    {
+                        supplyDate = new FreeTextSupplyDate
+                        {
+                            Text = value.SupplyDate
+                        };
+                    }
                     break;
                 case "delivery_date":
                     supplyDateType = SupplyDateType.DeliveryDate;
-                    supplyDate = new DateSupplyDate
+                    try
                     {
-                        Date = value.SupplyDate.ToOptionalDateTime()
-                    };
+                        supplyDate = new DateSupplyDate
+                        {
+                            Date = value.SupplyDate.ToOptionalDateTime()
+                        };
+                    }
+                    catch
+                    {
+                        supplyDate = new FreeTextSupplyDate
+                        {
+                            Text = value.SupplyDate
+                        };
+                    }
+
                     break;
                 case "supply_text":
                     supplyDateType = SupplyDateType.SupplyDate;
