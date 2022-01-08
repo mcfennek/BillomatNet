@@ -70,5 +70,23 @@ namespace Develappers.BillomatNet.Api
 
         [JsonProperty("page_count")]
         public string PageCount { get; set; }
+
+        [JsonProperty("base64file")]
+        public string Base64File { get; set; }
+
+        [JsonProperty("customfield")]
+        public string Customfield { get; set; }
+
+        public bool ShouldSerializeExpenseAccountNumber()
+        {
+            // don't serialize ExpenseAccountNumber property if not set
+            return (ExpenseAccountNumber != null);
+        }
+
+        public bool ShouldSerializeBase64File()
+        {
+            // don't serialize Base64File property if not set; it is only used for create
+            return (Base64File != null);
+        }
     }
 }

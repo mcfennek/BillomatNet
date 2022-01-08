@@ -32,5 +32,7 @@ namespace Develappers.BillomatNet.Types
         public string ExpenseAccountNumber { get; set; }
         public string Category { get; set; }
         public int PageCount { get; set; }
+        public string Customfield { get; set; }
+        public byte[] PdfContent { get; set; }
     }
 }

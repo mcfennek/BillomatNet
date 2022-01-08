@@ -15,6 +15,46 @@ namespace Develappers.BillomatNet.Mapping
             return ApiToDomain(value?.Supplier);
         }
 
+        public Api.Supplier DomainToApi(Supplier value)
+        {
+            if (value == null)
+            {
+                return null;
+            }
+
+            return new Api.Supplier
+            {
+                Id = value.Id.ToApiInt(),
+                Created = value.Created.ToApiDateTime(),
+                ClientNumber = value.ClientNumber,
+                Name = value.Name,
+                Salutation = value.Salutation,
+                FirstName = value.FirstName,
+                LastName = value.LastName,
+                Street = value.Street,
+                Zip = value.Zip,
+                City = value.City,
+                State = value.State,
+                CountryCode = value.CountryCode,
+                Address = value.Address,
+                Phone = value.Phone,
+                Fax = value.Fax,
+                Mobile = value.Mobile,
+                Email = value.Email,
+                Www = value.Www,
+                TaxNumber = value.TaxNumber,
+                VatNumber = value.VatNumber,
+                BankAccountOwner = value.BankAccountOwner,
+                BankNumber = value.BankNumber,
+                BankName = value.BankName,
+                BankAccountNumber = value.BankAccountNumber,
+                BankSwift = value.BankSwift,
+                BankIban = value.BankIban,
+                CurrencyCode = value.CurrencyCode,
+                Note = value.Note
+            };
+        }
+
         public Supplier ApiToDomain(Api.Supplier value)
         {
             if (value == null)
@@ -59,7 +99,7 @@ namespace Develappers.BillomatNet.Mapping
                 CreditorIdentifier = value.CreditorIdentifier,
                 CostsGross = value.CostsGross.ToFloat(),
                 CostsNet = value.CostsNet.ToFloat(),
-                SupplierPropertyValues = value.SupplierPropertyValues.ToDomain()
+                SupplierPropertyValues = value.SupplierPropertyValues?.ToDomain()
             };
             return result;
         }

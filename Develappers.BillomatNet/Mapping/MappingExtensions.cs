@@ -27,6 +27,7 @@ using InvoiceTag = Develappers.BillomatNet.Types.InvoiceTag;
 using Settings = Develappers.BillomatNet.Types.Settings;
 using Supplier = Develappers.BillomatNet.Types.Supplier;
 using SupplierPropertyValue = Develappers.BillomatNet.Types.SupplierPropertyValue;
+using SupplierTag = Develappers.BillomatNet.Types.SupplierTag;
 using TagCloudItem = Develappers.BillomatNet.Types.TagCloudItem;
 using Tax = Develappers.BillomatNet.Types.Tax;
 using Unit = Develappers.BillomatNet.Types.Unit;
@@ -58,8 +59,10 @@ namespace Develappers.BillomatNet.Mapping
         private static readonly ClientPropertyMapper s_clientPropertyMapper = new ClientPropertyMapper();
         private static readonly SupplierMapper s_supplierMapper = new SupplierMapper();
         private static readonly SupplierPropertyValueMapper s_supplierPropertyValueMapper = new SupplierPropertyValueMapper();
+        private static readonly SupplierTagMapper s_supplierTagMapper = new SupplierTagMapper();
         private static readonly PurchaseInvoiceMapper s_purchaseInvoiceMapper = new PurchaseInvoiceMapper();
         private static readonly PurchaseInvoiceDocumentMapper s_purchaseInvoiceDocumentMapper = new PurchaseInvoiceDocumentMapper();
+        private static readonly PurchaseInvoiceTagMapper s_purchaseInvoiceTagMapper = new PurchaseInvoiceTagMapper();
         private static readonly InboxDocumentMapper s_inboxDocumentMapper = new InboxDocumentMapper();
 
         internal static Types.PagedList<Article> ToDomain(this ArticleListWrapper value)
@@ -247,6 +250,31 @@ namespace Develappers.BillomatNet.Mapping
             return s_invoiceTagMapper.DomainToApi(value);
         }
 
+        internal static Types.PagedList<TagCloudItem> ToDomain(this IncomingTagCloudItemListWrapper value)
+        {
+            return s_purchaseInvoiceTagMapper.ApiToDomain(value);
+        }
+
+        internal static Types.PagedList<TagCloudItem> ToDomain(this IncomingTagCloudItemList value)
+        {
+            return s_purchaseInvoiceTagMapper.ApiToDomain(value);
+        }
+
+        internal static Types.PagedList<PurchaseInvoiceTag> ToDomain(this IncomingTagListWrapper value)
+        {
+            return s_purchaseInvoiceTagMapper.ApiToDomain(value);
+        }
+
+        internal static PurchaseInvoiceTag ToDomain(this IncomingTagWrapper value)
+        {
+            return s_purchaseInvoiceTagMapper.ApiToDomain(value);
+        }
+
+        internal static Api.IncomingTag ToApi(this PurchaseInvoiceTag value)
+        {
+            return s_purchaseInvoiceTagMapper.DomainToApi(value);
+        }
+
         internal static Types.PagedList<Contact> ToDomain(this ContactListWrapper value)
         {
             return s_contactMapper.ApiToDomain(value);
@@ -382,14 +410,49 @@ namespace Develappers.BillomatNet.Mapping
             return s_supplierMapper.ApiToDomain(value);
         }
 
+        internal static Api.Supplier ToApi(this Supplier value)
+        {
+            return s_supplierMapper.DomainToApi(value);
+        }
+
         internal static PurchaseInvoice ToDomain(this IncomingWrapper value)
         {
             return s_purchaseInvoiceMapper.ApiToDomain(value);
         }
 
+        internal static Api.Incoming ToApi(this PurchaseInvoice value)
+        {
+            return s_purchaseInvoiceMapper.DomainToApi(value);
+        }
+
         internal static List<SupplierPropertyValue> ToDomain(this SupplierPropertyValuesWrapper value)
         {
             return s_supplierPropertyValueMapper.ApiToDomain(value);
+        }
+
+        internal static Types.PagedList<TagCloudItem> ToDomain(this SupplierTagCloudItemListWrapper value)
+        {
+            return s_supplierTagMapper.ApiToDomain(value);
+        }
+
+        internal static Types.PagedList<TagCloudItem> ToDomain(this SupplierTagCloudItemList value)
+        {
+            return s_supplierTagMapper.ApiToDomain(value);
+        }
+
+        internal static Types.PagedList<SupplierTag> ToDomain(this SupplierTagListWrapper value)
+        {
+            return s_supplierTagMapper.ApiToDomain(value);
+        }
+
+        internal static SupplierTag ToDomain(this SupplierTagWrapper value)
+        {
+            return s_supplierTagMapper.ApiToDomain(value);
+        }
+
+        internal static Api.SupplierTag ToApi(this SupplierTag value)
+        {
+            return s_supplierTagMapper.DomainToApi(value);
         }
     }
 }

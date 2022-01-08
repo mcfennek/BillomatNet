@@ -44,9 +44,46 @@ namespace Develappers.BillomatNet.Mapping
             };
         }
 
-        public Incoming DomainToApi(PurchaseInvoice value)
+
+        public Api.Incoming DomainToApi(PurchaseInvoice value)
         {
-            throw new NotImplementedException();
+            if (value == null)
+            {
+                return null;
+            }
+
+            if (value.PdfContent != null && value.PdfContent.Length == 0)
+            {
+                value.PdfContent = null;
+            }
+
+            return new Api.Incoming
+            {
+
+                Id = value.Id.ToApiInt(),
+                Address = value.Address,
+                Number = value.Number,
+                DueDate = value.DueDate.ToApiDate(),
+                Category = value.Category,
+                ClientNumber = value.ClientNumber,
+                Created = value.Created.ToApiDateTime(),
+                CurrencyCode = value.CurrencyCode,
+                Date = value.Date.ToApiDate(),
+                ExpenseAccountNumber = value.ExpenseAccountNumber,
+                Label = value.Label,
+                Note = value.Note,
+                OpenAmount = value.OpenAmount.ToApiFloat(),
+                PageCount = value.PageCount.ToApiInt(),
+                PaidAmount = value.PaidAmount.ToApiFloat(),
+                Quote = value.Quote.ToApiFloat(),
+                Status = value.Status.ToApiValue(),
+                SupplierId = value.SupplierId.ToApiInt(),
+                TotalGross = value.TotalGross.ToApiFloat(),
+                TotalNet = value.TotalNet.ToApiFloat(),
+                Updated = value.Updated.ToApiDateTime(),
+                Base64File = value.PdfContent != null ? Convert.ToBase64String(value.PdfContent) : null,
+                Customfield = value.Customfield
+            };
         }
 
         public PurchaseInvoice ApiToDomain(IncomingWrapper value)

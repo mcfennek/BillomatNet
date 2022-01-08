@@ -4,13 +4,16 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Develappers.BillomatNet.Api;
 using Develappers.BillomatNet.Api.Net;
 using Develappers.BillomatNet.Mapping;
 using Develappers.BillomatNet.Queries;
+using Develappers.BillomatNet.Types;
 using Supplier = Develappers.BillomatNet.Types.Supplier;
+using SupplierTag = Develappers.BillomatNet.Types.SupplierTag;
 
 namespace Develappers.BillomatNet
 {
@@ -90,19 +93,127 @@ namespace Develappers.BillomatNet
             return jsonModel.ToDomain();
         }
 
+        /// <summary>
+        /// Deletes the supplier with the given ID.
+        /// </summary>
+        /// <param name="id">The ID.</param>
+        /// <param name="token">The token.</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation.
+        /// </returns>
+        /// <exception cref="ArgumentException">Thrown when the parameter check fails.</exception>
+        /// <exception cref="NotAuthorizedException">Thrown when not authorized to access this resource.</exception>
+        /// <exception cref="NotFoundException">Thrown when the resource url could not be found.</exception>
         public Task DeleteAsync(int id, CancellationToken token = default)
         {
-            throw new NotImplementedException("This service is not implemented by now. You can help us by contributing to our project on github.");
+            if (id <= 0)
+            {
+                throw new ArgumentException("invalid client id", nameof(id));
+            }
+            return DeleteAsync($"/api/{EntityUrlFragment}/{id}", token);
         }
 
-        Task<Supplier> IEntityService<Supplier, SupplierFilter>.CreateAsync(Supplier model, CancellationToken token)
+        /// <summary>
+        /// Updates the specified supplier.
+        /// </summary>
+        /// <param name="value">The supplier.</param>
+        /// <param name="token">The token.</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation.
+        /// The task result contains the updated supplier.
+        /// </returns>
+        /// <exception cref="ArgumentException">Thrown when the parameter check fails.</exception>
+        /// <exception cref="NotAuthorizedException">Thrown when not authorized to access this resource.</exception>
+        /// <exception cref="NotFoundException">Thrown when the resource url could not be found.</exception>
+        public async Task<Supplier> EditAsync(Supplier value, CancellationToken token = default)
         {
-            throw new NotImplementedException("This service is not implemented by now. You can help us by contributing to our project on github.");
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+
+            if (value.Id <= 0)
+            {
+                throw new ArgumentException("invalid client id", nameof(value));
+            }
+
+            var wrappedModel = new SupplierWrapper
+            {
+                Supplier = value.ToApi()
+            };
+
+            var jsonModel = await PutAsync($"/api/{EntityUrlFragment}/{value.Id}", wrappedModel, token);
+            return jsonModel.ToDomain();
         }
 
-        Task<Supplier> IEntityService<Supplier, SupplierFilter>.EditAsync(Supplier model, CancellationToken token)
+        /// <summary>
+        /// Creates a supplier.
+        /// </summary>
+        /// <param name="value">The supplier to create.</param>
+        /// <param name="token">The cancellation token.</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation.
+        /// The task result contains the new supplier.
+        /// </returns>
+        /// <exception cref="ArgumentException">Thrown when the parameter check fails.</exception>
+        /// <exception cref="NotAuthorizedException">Thrown when not authorized to access this resource.</exception>
+        /// <exception cref="NotFoundException">Thrown when the resource url could not be found.</exception>
+        public async Task<Supplier> CreateAsync(Supplier value, CancellationToken token = default)
         {
-            throw new NotImplementedException("This service is not implemented by now. You can help us by contributing to our project on github.");
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+            if (value.Id != 0)
+            {
+                throw new ArgumentException("invalid supplier id", nameof(value));
+            }
+
+            var wrappedModel = new SupplierWrapper
+            {
+                Supplier = value.ToApi()
+            };
+
+            var jsonModel = await PostAsync($"/api/{EntityUrlFragment}", wrappedModel, token).ConfigureAwait(false);
+            return jsonModel.ToDomain();
+        }
+
+        /// <summary>
+        /// Creates a supplier tag.
+        /// </summary>
+        /// <param name="value">The supplier tag.</param>
+        /// <param name="token">The cancellation token.</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation.
+        /// The task result returns the newly created supplier tag with the ID.
+        /// </returns>
+        /// <exception cref="ArgumentException">Thrown when the parameter check fails.</exception>
+        /// <exception cref="NotAuthorizedException">Thrown when not authorized to access this resource.</exception>
+        /// <exception cref="NotFoundException">Thrown when the resource url could not be found.</exception>
+        public async Task<SupplierTag> CreateTagAsync(SupplierTag value, CancellationToken token = default)
+        {
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+            if (value.SupplierId == 0 || string.IsNullOrEmpty(value.Name) || value.Id != 0)
+            {
+                throw new ArgumentException("invalid property values for supplier tag", nameof(value));
+            }
+            var wrappedModel = new SupplierTagWrapper
+            {
+                SupplierTag = value.ToApi()
+            };
+            try
+            {
+                var result = await PostAsync("/api/supplier-tags", wrappedModel, token);
+                return result.ToDomain();
+            }
+            catch (WebException wex)
+                when (wex.Status == WebExceptionStatus.ProtocolError && (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.BadRequest)
+            {
+                throw new ArgumentException("wrong input parameter", nameof(value), wex);
+            }
         }
 
         /// <summary>

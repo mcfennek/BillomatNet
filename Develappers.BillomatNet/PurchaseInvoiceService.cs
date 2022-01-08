@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Develappers.BillomatNet.Api;
@@ -75,7 +76,7 @@ namespace Develappers.BillomatNet
         /// A task that represents the asynchronous operation.
         /// The task result contains the list of incoming invoices.
         /// </returns>
-        public async Task<Types.PagedList<PurchaseInvoice>> GetListAsync(Query<PurchaseInvoice, PurchaseInvoiceFilter> query, CancellationToken token)
+        public async Task<Types.PagedList<PurchaseInvoice>> GetListAsync(Query<PurchaseInvoice, PurchaseInvoiceFilter> query, CancellationToken token = default)
         {
             var jsonModel = await GetListAsync<IncomingListWrapper>($"/api/{EntityUrlFragment}", QueryString.For(query), token).ConfigureAwait(false);
             return jsonModel.ToDomain();
@@ -119,19 +120,170 @@ namespace Develappers.BillomatNet
             return jsonModel.ToDomain();
         }
 
-        Task IEntityService<PurchaseInvoice, PurchaseInvoiceFilter>.DeleteAsync(int id, CancellationToken token)
+
+        /// <summary>
+        /// Deletes the purchase invoice with the given ID.
+        /// </summary>
+        /// <param name="id">The ID.</param>
+        /// <param name="token">The token.</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation.
+        /// </returns>
+        /// <exception cref="ArgumentException">Thrown when the parameter check fails.</exception>
+        /// <exception cref="NotAuthorizedException">Thrown when not authorized to access this resource.</exception>
+        /// <exception cref="NotFoundException">Thrown when the resource url could not be found.</exception>
+        public Task DeleteAsync(int id, CancellationToken token = default)
         {
-            throw new NotImplementedException("This service is not implemented by now. You can help us by contributing to our project on github.");
+            if (id <= 0)
+            {
+                throw new ArgumentException("invalid purchase invoice id", nameof(id));
+            }
+            return DeleteAsync($"/api/{EntityUrlFragment}/{id}", token);
         }
 
-        Task<PurchaseInvoice> IEntityService<PurchaseInvoice, PurchaseInvoiceFilter>.CreateAsync(PurchaseInvoice model, CancellationToken token)
+        /// <summary>
+        /// Updates the specified purchase invoice.
+        /// </summary>
+        /// <param name="value">The purchase invoice.</param>
+        /// <param name="token">The token.</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation.
+        /// The task result contains the updated purchase invoice.
+        /// </returns>
+        /// <exception cref="ArgumentException">Thrown when the parameter check fails.</exception>
+        /// <exception cref="NotAuthorizedException">Thrown when not authorized to access this resource.</exception>
+        /// <exception cref="NotFoundException">Thrown when the resource url could not be found.</exception>
+        public async Task<PurchaseInvoice> EditAsync(PurchaseInvoice value, CancellationToken token = default)
         {
-            throw new NotImplementedException("This service is not implemented by now. You can help us by contributing to our project on github.");
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+
+            if (value.Id <= 0)
+            {
+                throw new ArgumentException("invalid purchase invoice id", nameof(value));
+            }
+
+            var wrappedModel = new IncomingWrapper
+            {
+                Incoming = value.ToApi()
+            };
+
+            var jsonModel = await PutAsync($"/api/{EntityUrlFragment}/{value.Id}", wrappedModel, token);
+            return jsonModel.ToDomain();
         }
 
-        Task<PurchaseInvoice> IEntityService<PurchaseInvoice, PurchaseInvoiceFilter>.EditAsync(PurchaseInvoice model, CancellationToken token)
+        /// <summary>
+        /// Creates a purchase invoice.
+        /// </summary>
+        /// <param name="value">The purchase invoice to create.</param>
+        /// <param name="token">The cancellation token.</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation.
+        /// The task result contains the new purchase invoice.
+        /// </returns>
+        /// <exception cref="ArgumentException">Thrown when the parameter check fails.</exception>
+        /// <exception cref="NotAuthorizedException">Thrown when not authorized to access this resource.</exception>
+        /// <exception cref="NotFoundException">Thrown when the resource url could not be found.</exception>
+        public async Task<PurchaseInvoice> CreateAsync(PurchaseInvoice value, CancellationToken token = default)
         {
-            throw new NotImplementedException("This service is not implemented by now. You can help us by contributing to our project on github.");
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+            if (value.Id != 0)
+            {
+                throw new ArgumentException("invalid client id", nameof(value));
+            }
+
+            var wrappedModel = new IncomingWrapper
+            {
+                Incoming = value.ToApi()
+            };
+
+            var jsonModel = await PostAsync($"/api/{EntityUrlFragment}", wrappedModel, token).ConfigureAwait(false);
+            return jsonModel.ToDomain();
+        }
+
+        /// <summary>
+        /// Retrieves an invoice tag by it's ID.
+        /// </summary>
+        /// <param name="id">The ID.</param>
+        /// <param name="token">The token.</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation.
+        /// The task result contains the invoice tag.
+        /// </returns>
+        /// <exception cref="ArgumentException">Thrown when the parameter check fails.</exception>
+        /// <exception cref="NotAuthorizedException">Thrown when not authorized to access this resource.</exception>
+        /// <exception cref="NotFoundException">Thrown when the resource url could not be found.</exception>
+        public async Task<PurchaseInvoiceTag> GetTagByIdAsync(int id, CancellationToken token = default)
+        {
+            if (id <= 0)
+            {
+                throw new ArgumentException("invalid purchase invoice tag id", nameof(id));
+            }
+            var jsonModel = await GetItemByIdAsync<IncomingTagWrapper>($"/api/invoice-tags/{id}", token).ConfigureAwait(false);
+            return jsonModel.ToDomain();
+        }
+
+        /// <summary>
+        /// Creates an incoming tag.
+        /// </summary>
+        /// <param name="value">The incoming tag.</param>
+        /// <param name="token">The cancellation token.</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation.
+        /// The task result returns the newly created incoming tag with the ID.
+        /// </returns>
+        /// <exception cref="ArgumentException">Thrown when the parameter check fails.</exception>
+        /// <exception cref="NotAuthorizedException">Thrown when not authorized to access this resource.</exception>
+        /// <exception cref="NotFoundException">Thrown when the resource url could not be found.</exception>
+        public async Task<PurchaseInvoiceTag> CreateTagAsync(PurchaseInvoiceTag value, CancellationToken token = default)
+        {
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+            if (value.PurchaseInvoiceId == 0 || string.IsNullOrEmpty(value.Name) || value.Id != 0)
+            {
+                throw new ArgumentException("invalid property values for purchase invoice tag", nameof(value));
+            }
+            var wrappedModel = new IncomingTagWrapper
+            {
+                IncomingTag = value.ToApi()
+            };
+            try
+            {
+                var result = await PostAsync("/api/incoming-tags", wrappedModel, token);
+                return result.ToDomain();
+            }
+            catch (WebException wex)
+                when (wex.Status == WebExceptionStatus.ProtocolError && (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.BadRequest)
+            {
+                throw new ArgumentException("wrong input parameter", nameof(value), wex);
+            }
+        }
+
+        /// <summary>
+        /// Deletes an purchase invoice tag.
+        /// </summary>
+        /// <param name="id">The ID of the purchase invoice tag.</param>
+        /// <param name="token">The cancellation token.</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation.
+        /// </returns>
+        /// <exception cref="ArgumentException">Thrown when the parameter check fails.</exception>
+        /// <exception cref="NotAuthorizedException">Thrown when not authorized to access this resource.</exception>
+        /// <exception cref="NotFoundException">Thrown when the resource url could not be found.</exception>
+        public Task DeleteTagAsync(int id, CancellationToken token = default)
+        {
+            if (id <= 0)
+            {
+                throw new ArgumentException("invalid purchase invoice tag id", nameof(id));
+            }
+            return DeleteAsync($"/api/incoming-tags/{id}", token);
         }
     }
 }
